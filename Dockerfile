@@ -2,7 +2,8 @@ FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
 
 COPY ansible/ /thycotic
 
-RUN pip install zeep && \
+RUN easy_install pip &&\
+    pip install --no-cache-dir zeep && \
     mkdir /.ansible && \
     chmod -Rf 775 /.ansible && \
     chmod -Rf 775 /thycotic && \

@@ -4,6 +4,7 @@ COPY ansible/ /thycotic
 
 RUN easy_install pip &&\
     pip install --no-cache-dir zeep && \
+    pip install --no-cache-dir openshift && \
     mkdir /.ansible && \
     chmod -Rf 775 /.ansible && \
     chmod -Rf 775 /thycotic && \

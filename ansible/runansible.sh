@@ -2,4 +2,4 @@
 
 cd /thycotic
 
-ansible-playbook generate_openshift_secrets.yml -vvv
+ansible-playbook generate_openshift_secrets.yml --connection=local -vvv

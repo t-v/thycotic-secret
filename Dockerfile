@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ansible-runner-12/ansible-runner:latest
+FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
 
 COPY ansible/ /thycotic
 

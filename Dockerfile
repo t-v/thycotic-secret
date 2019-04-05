@@ -1,34 +1,51 @@
-FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
-# https://access.redhat.com/containers/?tab=overview#/registry.access.redhat.com/ansible-runner-12/ansible-runner
-# https://access.redhat.com/downloads/content/python27-python-pip/8.1.2-3.el7/noarch/fd431d51/package
+FROM alpine:3.6
 
-COPY ansible/ /thycotic
+RUN	apk --update add \
+		bash \
+		ca-certificates \
+		git \
+		less=487-r0 \
+		openssl \
+		openssh-client \
+		p7zip \
+		python \
+		py-lxml \
+		py-pip \
+		rsync \
+		sshpass \
+		sudo \
+		subversion \
+		vim \
+		zip \
+    	&& apk --update add --virtual \
+		build-dependencies \
+		python-dev \
+		libffi-dev \
+		openssl-dev \
+		build-base \
+	&& pip install --no-cache-dir --upgrade \
+		pip \
+		cffi \
+	&& pip install --no-cache-dir \
+		ansible==2.4.1 \
+		ansible-lint==3.4.17 \
+		boto==2.45.0 \
+ 		boto3==1.4.4 \
+		docker-py==1.10.6 \
+		dopy==0.3.7 \
+		openshift==0.8.7 \
+		python_jenkins==0.4.15 \
+		pywinrm>=0.1.1 \
+		pyvmomi==6.0.0.2016.6 \
+		pysphere>=0.1.7 \
+	&& apk del build-dependencies \
+	&& rm -rf /var/cache/apk/*
 
-#ENV LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
+RUN	mkdir -p /etc/ansible \		
+	&& echo 'localhost' > /etc/ansible/hosts \		
+	&& mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
 
-RUN yum repolist --disablerepo=* && \
-    yum-config-manager --disable \* > /dev/null && \
-    yum-config-manager --enable rhel-7-server-rpms > /dev/null
-#     yum-config-manager --enable rhel-7-server-extras-rpms > /dev/null && \
-#     yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null && \
-#     yum-config-manager --enable rhel-server-rhscl-7-rpms > /dev/null && \
-RUN yum install -y python-devel
-#RUN yum-config-manager --enable rhel-7-server-extras-rpms > /dev/null && \
-#    yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null
-#RUN yum install -y python2-openshift
-RUN easy_install pip && \
-    # scl enable python27 bash && \
-    # source scl_source enable python27 && \
-    # export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64 && \
-    python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir --upgrade setuptools && \
-    python -m pip install --no-cache-dir openshift && \
-    python -m pip install --no-cache-dir zeep && \
-    mkdir /.ansible && \
-    chmod -R 775 /.ansible && \
-    chmod -R 775 /thycotic && \
-    chmod g+w /etc/passwd
-
-USER 1001
-
-ENTRYPOINT ["/thycotic/runansible.sh"]
+ONBUILD	WORKDIR	/tmp
+ONBUILD	COPY 	. /tmp
+ONBUILD	RUN	ansible -c local -m setup all > /dev/null
+CMD ["bash"]

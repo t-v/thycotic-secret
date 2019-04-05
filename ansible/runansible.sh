@@ -8,4 +8,5 @@ fi
 
 cd /thycotic
 
-ansible-playbook generate_openshift_secrets.yml --connection=local -vvvvv
+ansible-playbook generate_openshift_secrets.yml --connection=local -vvvvv || true
+sleep 1000

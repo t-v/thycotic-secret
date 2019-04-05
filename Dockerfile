@@ -38,8 +38,6 @@ Host *\n\
     UserKnownHostsFile=/dev/null\n\
 """ >> /etc/ssh/ssh_config
 
-COPY entrypoint /usr/local/bin/
-
 COPY ansible/ /thycotic
 USER 1001
 

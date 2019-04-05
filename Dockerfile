@@ -37,6 +37,11 @@ Host *\n\
     StrictHostKeyChecking no\n\
     UserKnownHostsFile=/dev/null\n\
 """ >> /etc/ssh/ssh_config
+ && mkdir /.ansible \
+ && chmod -R 775 /.ansible \
+ && chmod -R 775 /thycotic \
+ && chmod -R 775 /etc/ansible \
+ && chmod g+w /etc/passwd
 
 COPY ansible/ /thycotic
 USER 1001

@@ -1,4 +1,6 @@
 FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
+# https://access.redhat.com/containers/?tab=overview#/registry.access.redhat.com/ansible-runner-12/ansible-runner
+# https://access.redhat.com/downloads/content/python27-python-pip/8.1.2-3.el7/noarch/fd431d51/package
 
 COPY ansible/ /thycotic
 
@@ -14,8 +16,8 @@ RUN yum repolist --disablerepo=* && \
     scl enable python27 bash && \
     source scl_source enable python27 && \
     export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64 && \
-    /opt/rh/python27/root/usr/bin/pip install --no-cache-dir --upgrade pip && \
-    /opt/rh/python27/root/usr/bin/pip install --no-cache-dir zeep && \
+    python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir zeep && \
     mkdir /.ansible && \
     chmod -R 775 /.ansible && \
     chmod -R 775 /thycotic && \

@@ -17,8 +17,8 @@ RUN yum repolist --disablerepo=* && \
     /opt/rh/python27/root/usr/bin/pip install --no-cache-dir --upgrade pip && \
     /opt/rh/python27/root/usr/bin/pip install --no-cache-dir zeep && \
     mkdir /.ansible && \
-    chmod -rf 775 /.ansible && \
-    chmod -rf 775 /thycotic && \
+    chmod 775 -rf /.ansible && \
+    chmod 775 -rf /thycotic && \
     chmod g+w /etc/passwd
 
 USER 1001

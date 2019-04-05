@@ -5,6 +5,7 @@ COPY ansible/ /thycotic
 RUN yum repolist --disablerepo=* && \
     yum-config-manager --disable \* > /dev/null && \
     yum-config-manager --enable rhel-7-server-rpms > /dev/null && \
+    yum-config-manager --enable rhel-7-server-extras-rpms > /dev/null && \
     yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms > /dev/null
 RUN yum -y install python27-python-pip python2-openshift

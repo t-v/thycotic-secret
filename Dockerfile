@@ -23,6 +23,7 @@ RUN apk --update add --virtual \
  && pip3 install \
         ansible \
         ansible-lint \
+        lxml \
         openshift \
         zeep \
  && apk del \

@@ -9,7 +9,7 @@ RUN yum repolist --disablerepo=* && \
     yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms > /dev/null  && \
     yum install -y python27-python-pip python2-openshift
-RUN pip2.7 install --no-cache-dir zeep
+RUN /usr/bin/pip2.7 install --no-cache-dir zeep
 RUN mkdir /.ansible
 RUN chmod -Rf 775 /.ansible
 RUN chmod -Rf 775 /thycotic

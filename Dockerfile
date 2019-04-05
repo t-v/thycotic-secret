@@ -2,9 +2,8 @@ FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
 
 COPY ansible/ /thycotic
 
-RUN easy_install pip &&\
+RUN yum -y install python-pip python2-openshift &&\
     pip install --no-cache-dir zeep && \
-    pip install --no-cache-dir openshift && \
     mkdir /.ansible && \
     chmod -Rf 775 /.ansible && \
     chmod -Rf 775 /thycotic && \

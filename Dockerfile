@@ -2,7 +2,12 @@ FROM registry.access.redhat.com/ansible-runner-12/ansible-runner
 
 COPY ansible/ /thycotic
 
-RUN yum -y install python27-pip python2-openshift
+RUN yum repolist --disablerepo=* && \
+    yum-config-manager --disable \* > /dev/null && \
+    yum-config-manager --enable rhel-7-server-rpms > /dev/null && \
+    yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms > /dev/null
+RUN yum -y install python27-python-pip python2-openshift
 RUN pip install --no-cache-dir zeep
 RUN mkdir /.ansible
 RUN chmod -Rf 775 /.ansible

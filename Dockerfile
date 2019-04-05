@@ -3,6 +3,7 @@ FROM alpine:3.9
 RUN apk --update --no-cache add \
         ca-certificates \
         git \
+        libxslt-dev \
         openssh-client \
         openssl \
         python3\
@@ -15,7 +16,6 @@ RUN apk --update add --virtual \
         libffi-dev \
         openssl-dev \
         libxml2-dev \
-        libxslt-dev \
         build-base \
  && pip3 install --upgrade \
         pip \

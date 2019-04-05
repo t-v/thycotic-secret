@@ -15,7 +15,7 @@ RUN apk --update add --virtual \
         libffi-dev \
         openssl-dev \
         libxml2-dev \
-        libxslt1-dev \
+        libxslt-dev \
         build-base \
  && pip3 install --upgrade \
         pip \

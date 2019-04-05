@@ -1,51 +1,48 @@
-FROM alpine:3.6
+FROM alpine:3.9
 
-RUN	apk --update add \
-		bash \
-		ca-certificates \
-		git \
-		less=487-r0 \
-		openssl \
-		openssh-client \
-		p7zip \
-		python \
-		py-lxml \
-		py-pip \
-		rsync \
-		sshpass \
-		sudo \
-		subversion \
-		vim \
-		zip \
-    	&& apk --update add --virtual \
-		build-dependencies \
-		python-dev \
-		libffi-dev \
-		openssl-dev \
-		build-base \
-	&& pip install --no-cache-dir --upgrade \
-		pip \
-		cffi \
-	&& pip install --no-cache-dir \
-		ansible==2.4.1 \
-		ansible-lint==3.4.17 \
-		boto==2.45.0 \
- 		boto3==1.4.4 \
-		docker-py==1.10.6 \
-		dopy==0.3.7 \
-		openshift==0.8.7 \
-		python_jenkins==0.4.15 \
-		pywinrm>=0.1.1 \
-		pyvmomi==6.0.0.2016.6 \
-		pysphere>=0.1.7 \
-	&& apk del build-dependencies \
-	&& rm -rf /var/cache/apk/*
+RUN apk --update --no-cache add \
+        ca-certificates \
+        git \
+        openssh-client \
+        openssl \
+        python3\
+        rsync \
+        sshpass
 
-RUN	mkdir -p /etc/ansible \		
-	&& echo 'localhost' > /etc/ansible/hosts \		
-	&& mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
+RUN apk --update add --virtual \
+        .build-deps \
+        python3-dev \
+        libffi-dev \
+        openssl-dev \
+        build-base \
+ && pip3 install --upgrade \
+        pip \
+        cffi \
+ && pip3 install \
+        ansible \
+        ansible-lint \
+        openshift \
+        zeep \
+ && apk del \
+        .build-deps \
+ && rm -rf /var/cache/apk/*
 
-ONBUILD	WORKDIR	/tmp
-ONBUILD	COPY 	. /tmp
-ONBUILD	RUN	ansible -c local -m setup all > /dev/null
-CMD ["bash"]
+RUN mkdir -p /etc/ansible \
+ && echo 'localhost' > /etc/ansible/hosts \
+ && echo -e """\
+\n\
+Host *\n\
+    StrictHostKeyChecking no\n\
+    UserKnownHostsFile=/dev/null\n\
+""" >> /etc/ssh/ssh_config
+
+COPY entrypoint /usr/local/bin/
+
+COPY ansible/ /thycotic
+USER 1001
+
+WORKDIR /thycotic
+
+USER 1001
+
+ENTRYPOINT ["/thycotic/runansible.sh"]

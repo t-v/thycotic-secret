@@ -13,12 +13,13 @@ RUN yum repolist --disablerepo=* && \
 #     yum-config-manager --enable rhel-7-server-ose-3.9-rpms > /dev/null && \
 #     yum-config-manager --enable rhel-server-rhscl-7-rpms > /dev/null && \
 RUN yum install -y python-devel
+RUN yum install -y python2-openshift
 RUN easy_install pip && \
     # scl enable python27 bash && \
     # source scl_source enable python27 && \
     # export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64 && \
     python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir openshift && \
+    #python -m pip install --no-cache-dir openshift && \
     python -m pip install --no-cache-dir zeep && \
     mkdir /.ansible && \
     chmod -R 775 /.ansible && \

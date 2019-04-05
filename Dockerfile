@@ -36,7 +36,7 @@ RUN mkdir -p /etc/ansible \
 Host *\n\
     StrictHostKeyChecking no\n\
     UserKnownHostsFile=/dev/null\n\
-""" >> /etc/ssh/ssh_config
+""" >> /etc/ssh/ssh_config \
  && mkdir /.ansible \
  && chmod -R 775 /.ansible \
  && chmod -R 775 /thycotic \

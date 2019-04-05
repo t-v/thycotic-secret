@@ -21,6 +21,7 @@ RUN easy_install pip && \
     # source scl_source enable python27 && \
     # export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64 && \
     python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir --upgrade setuptools && \
     python -m pip install --no-cache-dir openshift && \
     python -m pip install --no-cache-dir zeep && \
     mkdir /.ansible && \

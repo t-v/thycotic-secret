@@ -8,9 +8,4 @@ fi
 
 cd /thycotic
 
-# scl enable python27 bash
-# source scl_source enable python27
-# export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64
-
-ansible-playbook generate_openshift_secrets.yml --connection=local -vvvvv || true
-sleep 1000
+ansible-playbook generate_openshift_secrets.yml --connection=local -v

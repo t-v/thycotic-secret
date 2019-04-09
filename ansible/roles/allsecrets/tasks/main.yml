@@ -43,6 +43,6 @@
 #   #no_log: True
 #   delegate_to: localhost
 
-- include: subtasks.yml file={{ item['metadata']['name'] }}
+- include: subtasks.yml namespace={{ item['metadata']['name'] }}
   with_items: "{{ namespaces['resources'] }}"
   when: item['metadata']['name'] in pim_secret.keys()

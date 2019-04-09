@@ -34,14 +34,14 @@
   debug:
     var: namespaces
 
-- name: Create secret files in {{ destination_openshift_secret_path }}
-  template:
-    src: "openshift_secret_template.yml.j2"
-    dest: "{{ destination_openshift_secret_path }}/{{ item.value.secretId }}.yml"
-  loop: "{{ namespaces[resources] }}"
-  when: item['metadata']['name'] in pim_secret.keys()
-  no_log: True
-  delegate_to: localhost
+# - name: Create secret files in {{ destination_openshift_secret_path }}
+#   template:
+#     src: "openshift_secret_template.yml.j2"
+#     dest: "{{ destination_openshift_secret_path }}/{{ item.value.secretId }}.yml"
+#   loop: "{{ namespaces[resources] }}"
+#   when: item['metadata']['name'] in pim_secret.keys()
+#   #no_log: True
+#   delegate_to: localhost
 
 - include: subtasks.yml file={{ item['metadata']['name'] }}
   with_items: "{{ namespaces[resources] }}"

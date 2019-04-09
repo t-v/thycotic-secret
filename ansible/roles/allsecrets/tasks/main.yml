@@ -1,0 +1,42 @@
+---
+
+- name: Check parameters
+  fail:
+    msg: "pim_folder_id is not defined."
+  when:
+    - pim_folder_id is not defined or pim_folder_id == ""
+
+- name: Lookup folder secret
+  set_fact:
+    pim_secret: "{{ lookup('thycotic_secret', folderId=pim_folder_id, wantlist=True) }}"
+
+- name: some output for foldersecret
+  debug:
+    var: pim_secret
+
+- name: Make sure {{ destination_openshift_secret_path }} exists
+  file:
+    path: "{{ destination_openshift_secret_path }}"
+    state: directory
+  delegate_to: localhost
+
+# - name: Create secret files in {{ destination_openshift_secret_path }}
+#   template:
+#     src: "openshift_secret_template.yml.j2"
+#     dest: "{{ destination_openshift_secret_path }}/{{ item.value.secretId }}.yml"
+#   loop: "{{ pim_secret|dict2items }}"
+#   no_log: True
+#   delegate_to: localhost
+
+# - name: create some secrets in openshift
+#   k8s:
+#     state: present
+#     definition: "{{ lookup('template', 'openshift_secret_template.yml.j2') }}"
+#     namespace: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/namespace') }}"
+#     api_key: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
+#     #cert_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+#     ssl_ca_cert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+#     host: "https://{{ lookup('env','KUBERNETES_SERVICE_HOST') }}:{{ lookup('env','KUBERNETES_SERVICE_PORT') }}"
+#   loop: "{{ pim_secret|dict2items }}"
+#   no_log: True
+#   delegate_to: localhost

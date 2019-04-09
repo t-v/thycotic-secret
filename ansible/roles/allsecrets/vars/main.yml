@@ -1,0 +1,10 @@
+---
+# pim_folder_id: <some_id>
+# pim_secret_id: <some_id>
+
+# thycotic_config:
+#   url: 'https://thycotic.server.local/SecretServer'
+#   username: <username>
+#   password: <password>
+
+# openshift_project: <some_project>

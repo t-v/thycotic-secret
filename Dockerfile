@@ -53,4 +53,4 @@ WORKDIR /thycotic
 
 USER 1001
 
-ENTRYPOINT ["/thycotic/runansible.sh"]
+CMD ["/thycotic/runansibleforns.sh"]

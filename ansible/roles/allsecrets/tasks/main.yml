@@ -47,4 +47,5 @@
   loop: "{{ namespaces['resources'] }}"
   loop_control:
     loop_var: namespace
+    label: "{{ item['metadata']['name'] }}"
   when: item['metadata']['name'] in pim_secret.keys()

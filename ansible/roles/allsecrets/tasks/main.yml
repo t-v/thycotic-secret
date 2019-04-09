@@ -8,7 +8,7 @@
 
 - name: Lookup folder secret
   set_fact:
-    pim_secret: "{{ lookup('thycotic_secret', folderId=pim_folder_id, wantlist=True) }}"
+    pim_secret: "{{ lookup('thycotic_secret', folderId=pim_folder_id, folderlist=True, wantlist=True) }}"
 
 - name: some output for foldersecret
   debug:
@@ -18,6 +18,15 @@
   file:
     path: "{{ destination_openshift_secret_path }}"
     state: directory
+  delegate_to: localhost
+
+- name: create some secrets in openshift
+  k8s_facts:
+    kind: Namespace
+    api_key: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
+    #cert_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    ssl_ca_cert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    host: "https://{{ lookup('env','KUBERNETES_SERVICE_HOST') }}:{{ lookup('env','KUBERNETES_SERVICE_PORT') }}"
   delegate_to: localhost
 
 # - name: Create secret files in {{ destination_openshift_secret_path }}

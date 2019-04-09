@@ -41,7 +41,9 @@ class LookupModule(LookupBase):
       raise AnsibleError(response_json['error'])
     token = response_json['access_token']
 
-    if 'folderId' in kwargs.keys():
+    if 'folderlist' in kwargs.keys():
+      return self.getFolder(token, thycotic_config['url'], kwargs['folderId'])
+    elif 'folderId' in kwargs.keys():
       return self.getFolderSecrets(token, thycotic_config['url'], kwargs['folderId'])
     elif 'secretId' in kwargs.keys():
       return {
@@ -85,10 +87,28 @@ class LookupModule(LookupBase):
     )
     
     secrets = zeep.helpers.serialize_object(result)
-    for secretSummary in secrets['SecretSummaries']['SecretSummary']:
-      result_hash[secretSummary['SecretId']] = self.getSingleSecret(token, baseUrl, secretSummary['SecretId'])
+
+    if secrets['SecretSummaries'] is not None and len(secrets['SecretSummaries']['SecretSummary']) > 0:
+      for secretSummary in secrets['SecretSummaries']['SecretSummary']:
+        result_hash[secretSummary['SecretId']] = self.getSingleSecret(token, baseUrl, secretSummary['SecretId'])
 
     return result_hash
 
 
+  def getFolder(self, token, baseUrl, folderId):
+    result_hash = {}
 
+    client = zeep.Client(baseUrl+'/webservices/SSWebService.asmx?WSDL')
+     
+    result = client.service.FolderGetAllChildren(
+      token,
+      folderId
+    )
+
+    folders = zeep.helpers.serialize_object(result)
+
+    if folders['Folders'] is not None and len(folders['Folders']['Folder']) > 0:
+      for folder in folders['Folders']['Folder']:
+        result_hash[folder['Name']] = self.getFolderSecrets(token, baseUrl, folder['Id'])
+
+    return result_hash

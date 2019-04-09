@@ -45,3 +45,4 @@
 
 - include: subtasks.yml file={{ item['metadata']['name'] }}
   with_items: "{{ namespaces['resources'] }}"
+  when: item['metadata']['name'] in pim_secret.keys()

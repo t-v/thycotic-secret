@@ -20,7 +20,7 @@
     state: directory
   delegate_to: localhost
 
-- name: create some secrets in openshift
+- name: List all namespaces
   k8s_facts:
     kind: Namespace
     api_key: "{{ lookup('file', '/var/run/secrets/kubernetes.io/serviceaccount/token') }}"
@@ -28,6 +28,11 @@
     ssl_ca_cert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     host: "https://{{ lookup('env','KUBERNETES_SERVICE_HOST') }}:{{ lookup('env','KUBERNETES_SERVICE_PORT') }}"
   delegate_to: localhost
+  register: namespaces
+
+- name: some output for foldersecret
+  debug:
+    var: namespaces
 
 # - name: Create secret files in {{ destination_openshift_secret_path }}
 #   template:

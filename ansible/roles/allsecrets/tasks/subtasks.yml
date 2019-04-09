@@ -4,7 +4,7 @@
   template:
     src: "openshift_secret_template.yml.j2"
     dest: "{{ destination_openshift_secret_path }}/{{ item.value.secretId }}.yml"
-  loop: "{{ pim_secret[namespace]|dict2items }}"
+  loop: "{{ pim_secret[namespace['metadata']['name']]|dict2items }}"
   no_log: True
   delegate_to: localhost
 
@@ -16,6 +16,6 @@
     #cert_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     ssl_ca_cert: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     host: "https://{{ lookup('env','KUBERNETES_SERVICE_HOST') }}:{{ lookup('env','KUBERNETES_SERVICE_PORT') }}"
-  loop: "{{ pim_secret[namespace]|dict2items }}"
+  loop: "{{ pim_secret[namespace['metadata']['name']]|dict2items }}"
   no_log: True
   delegate_to: localhost

@@ -43,7 +43,7 @@
 #   #no_log: True
 #   delegate_to: localhost
 
-- include: subtasks.yml namespace={{ namespace['metadata']['name'] }}
+- include: subtasks.yml
   loop: "{{ namespaces['resources'] }}"
   loop_control:
     loop_var: namespace

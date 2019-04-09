@@ -43,9 +43,9 @@
 #   #no_log: True
 #   delegate_to: localhost
 
-- include: subtasks.yml
+- include: subtasks.yml namespace={{ item['metadata']['name'] }}
   loop: "{{ namespaces['resources'] }}"
   loop_control:
     loop_var: namespace
     label: "{{ item['metadata']['name'] }}"
-  when: item['metadata']['name'] in pim_secret.keys()
+  when: namespace in pim_secret.keys()

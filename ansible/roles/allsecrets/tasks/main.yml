@@ -44,4 +44,4 @@
 #   delegate_to: localhost
 
 - include: subtasks.yml file={{ item['metadata']['name'] }}
-  with_items: "{{ namespaces[resources] }}"
+  with_items: "{{ namespaces['resources'] }}"
